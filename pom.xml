@@ -46,11 +46,6 @@
 			<version>4.1.72.Final</version>
 			<classifier>osx-aarch_64</classifier>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
     </dependencies>
 	<dependencyManagement>
 		<dependencies>

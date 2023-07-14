@@ -38,26 +38,13 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                     authHeader = authHeader.substring(7);
                 }
                 try {
-//                    //REST call to AUTH service
-//                    HttpHeaders headers = new HttpHeaders();
-//                    headers.set(HttpHeaders.AUTHORIZATION, authHeader);
-//                    HttpEntity<String> entity = new HttpEntity<>(headers);
-//
-//                    ResponseEntity<DataResponse> response = restTemplate.exchange(
-//                            "http://localhost:8082/auth/checklogin", HttpMethod.GET, entity, DataResponse.class);
-//
-//                    DataResponse dataResponse = response.getBody();
-                    restTemplate.getForObject("http://localhost:8082/auth/validate?token=" + authHeader, String.class);
-//                    System.out.println("AuthFilter-------------- "+dataResponse);
-//                    if (dataResponse.isSuccess() == false) {
-//                        throw new Exception();
-//                    }
-//                    exchange.getAttributes().put("user", dataResponse.getData());
-//                    jwtUtil.validateToken(authHeader);
+
+                    restTemplate.getForObject("http://auth-service/auth/validate?token=" + authHeader, String.class);
 
                 } catch (Exception e) {
                     System.out.println("invalid access...!");
-                    throw new RuntimeException("un authenticated access to application");
+                    System.out.println("Exception message: " + e.getMessage());
+//                    throw new RuntimeException("un authenticated access to application");
                 }
             }
             return chain.filter(exchange);
