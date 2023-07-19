@@ -9,7 +9,6 @@ phases:
       - echo Pulling the base image from Docker Hub...
       - docker pull openjdk:17-jdk-slim
       - REPOSITORY_URI= betty1998/api-gateway
-      - REPOSITORY_NAME = api-gateway
 #      - docker logout
 #      - echo Logging in to Amazon ECR...
 #      - aws --version
@@ -21,8 +20,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_NAME:latest .
-      - docker tag $REPOSITORY_NAME:latest $REPOSITORY_URI:latest
+      - docker build -t $REPOSITORY_URI:latest .
   post_build:
     commands:
       - echo Build completed on `date`
