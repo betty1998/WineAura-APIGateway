@@ -8,27 +8,27 @@ phases:
       - docker login -u betty1998 -p 8023Kobe.
       - echo Pulling the base image from Docker Hub...
       - docker pull openjdk:17-jdk-slim
-#      - REPOSITORY_URI= betty1998/api-gateway
-#      - docker logout
-#      - echo Logging in to Amazon ECR...
-#      - aws --version
-#      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 134283336620.dkr.ecr.us-east-1.amazonaws.com
-#      - REPOSITORY_URI=134283336620.dkr.ecr.us-east-1.amazonaws.com/api-gateway-docker
-#      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-#      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+
+      - docker logout
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 134283336620.dkr.ecr.us-east-1.amazonaws.com
+      - REPOSITORY_URI=134283336620.dkr.ecr.us-east-1.amazonaws.com/api-gateway-docker
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t betty1998/api-gateway:latest .
+      - docker build -t $REPOSITORY_URI:latest .
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker images...
-      - docker push betty1998/api-gateway:latest
-#      - echo Writing image definitions file...
-#      - printf '[{"name":"api-gateway","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-#      - cat imagedefinitions.json
+      - echo Pushing the Docker images....
+      - docker push $REPOSITORY_URI:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"service-registry","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json
 artifacts:
   files:
     - target/api-gateway.jar
